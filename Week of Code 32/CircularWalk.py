@@ -9,26 +9,27 @@ def circularWalk(n, s, t, r_0, g, seed, p):
     time=0
     if(s==t):
         return 0
-    spot=set()
-    spot.add(s)
-    sofar=spot
+    start={s}
+    sofar=start
     while(True):
         time+=1
-        spot=find_spot(n,spot,rs)
-        spot=spot.difference(sofar)
-        sofar=sofar|spot
-        if(t in spot):
+        start=(find_spot(n,start,rs,t)).difference(sofar)
+        if(start=={t}):
             return time
-        elif(len(spot)==0):
+        if(len(start)==0):
             return -1
+        sofar=sofar|start
             
     
-def find_spot(n,spot,rs):
+def find_spot(n,spot,rs,t):
     spots=set()
     for i in list(spot):
         ran=rs[i]
         for j in range(-ran, ran+1):
-            spots.add((i+j)%n)
+            ad=((i+j)%n)
+            if(ad==t):
+                return {t}
+            spots.add(ad)
     return spots
 
 n, s, t = input().strip().split(' ')
@@ -37,4 +38,3 @@ r_0, g, seed, p = input().strip().split(' ')
 r_0, g, seed, p = [int(r_0), int(g), int(seed), int(p)]
 result = circularWalk(n, s, t, r_0, g, seed, p)
 print(result)
-
